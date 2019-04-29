@@ -7,7 +7,7 @@ namespace AppCenter.Console
 {
     class Program
     {
-        static readonly string api_token = "27d66c8af84990fa93d03ae51cae88cc8b32622e";//X-API-Token = "";
+        static readonly string api_token = "PUT API KEY HERE";//X-API-Token = "";
         static async Task Main(string[] args)
         {
             try
