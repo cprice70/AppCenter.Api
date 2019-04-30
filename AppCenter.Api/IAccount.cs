@@ -5,7 +5,7 @@ using Refit;
 
 namespace AppCenter.Api
 {
-    [Headers("X-API-Token: KEY")]
+    [Headers("X-API-Token: Bearer")]
     public interface IAccount
     {
         [Get("/v0.1/user")]
