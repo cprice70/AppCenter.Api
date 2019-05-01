@@ -37,7 +37,7 @@ namespace AppCenter.Api
         public Build Build { get; set; }
     }
 
-    public partial class Build
+    public class Build
     {
         [JsonProperty("branch")]
         public string Branch { get; set; }
@@ -49,7 +49,7 @@ namespace AppCenter.Api
         public string CommitMessage { get; set; }
     }
 
-    public partial class Destination
+    public class Destination
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -70,7 +70,7 @@ namespace AppCenter.Api
         public string DestinationType { get; set; }
     }
 
-    public partial class DistributionGroup
+    public class DistributionGroup
     {
         [JsonProperty("name")]
         public string Name { get; set; }

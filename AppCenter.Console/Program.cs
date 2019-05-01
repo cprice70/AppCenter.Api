@@ -27,7 +27,7 @@ namespace AppCenter.Console
                 Owner = config["Owner"];
                 App = config["App"];
                 Task<string> GetHeaderValue() => Task.FromResult(Api_Token);
-                var handler = new CustomHttpClientHandler(GetHeaderValue);
+                var handler = new ApiKeyHttpClientHandler(GetHeaderValue);
                 var httpClient = new HttpClient(handler)
                 {
                     BaseAddress = new Uri("https://api.appcenter.ms")
@@ -42,41 +42,38 @@ namespace AppCenter.Console
                 System.Console.WriteLine(user.Name);
 
                 var connections = await appCenterApiUser.GetServiceConnections();
-                System.Console.WriteLine($"Number of Connections {connections.Count}");
+                System.Console.WriteLine($"Number of Connections: {connections.Count}");
 
                 var users = await appCenterApiUser.GetUsers(Owner);
-                System.Console.WriteLine($"Number of Users {users.Count}");
+                System.Console.WriteLine($"Number of Users: {users.Count}");
 
                 var testers = await appCenterApiUser.GetTesters(Owner);
-                System.Console.WriteLine($"Number of Testers {testers.Count}");
+                System.Console.WriteLine($"Number of Testers: {testers.Count}");
 
                 var releases = await appCenterApiDist.GetAppReleases(Owner, App);
-                System.Console.WriteLine($"Number of Releases {releases.Count}");
+                System.Console.WriteLine($"Number of Releases: {releases.Count}");
 
                 var recent_releases = await appCenterApiDist.GetAppRecentReleases(Owner, App);
+                System.Console.WriteLine($"Number of Recent Releases: {recent_releases.Count}");
+
+                var subs = await appCenterApiUser.GetAzureSubscriptions();
+                System.Console.WriteLine($"Number of Azure Subscriptions: {subs.Count}");
+
+                var invites = await appCenterApiUser.GetInvitations();
+                System.Console.WriteLine($"Number of Invitations: {invites.Count}");
+
+                var orgs = await appCenterApiUser.GetOrganizations();
+                System.Console.WriteLine($"Number of Organizations: {orgs.Count}");
+
+                foreach (var org in orgs)
+                {
+                    System.Console.WriteLine($"Organization Name {org.Name}");
+                }
             }
             catch (Exception ex)
             {
                 System.Console.WriteLine($"{ex}");
             }
-        }
-    }
-
-    class CustomHttpClientHandler : HttpClientHandler
-    {
-        private readonly Func<Task<string>> _getHeaderValue;
-
-        public CustomHttpClientHandler(Func<Task<string>> headerValue)
-        {
-            _getHeaderValue = headerValue ?? throw new ArgumentNullException(nameof(headerValue));
-        }
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            request.Headers.Remove("X-API-Token");
-            request.Headers.Add("X-API-Token", await _getHeaderValue());
-
-            return await base.SendAsync(request, cancellationToken);
         }
     }
 }

@@ -34,5 +34,38 @@ namespace AppCenter.Api
 
         [Get("/v0.1/orgs/{org_name}/invitations")]
         Task<List<Invitation>> GetInvitations(string org_name);
+
+        [Get("/v0.1/orgs/{org_name}/distribution_groups_details")]
+        Task<List<DistributionGroup>> GetDistributionGroupDetails(string org_name);
+
+        [Get("/v0.1/orgs/{org_name}/distribution_groups/{distribution_group_name}/members")]
+        Task<List<User>> GetDistributionGroupMembers(string org_name, string distribution_group_name);
+
+        [Get("/v0.1/orgs/{org_name}/distribution_groups/{distribution_group_name}/apps")]
+        Task<List<App>> GetDistributionGroupApps(string org_name, string distribution_group_name);
+
+        [Get("/v0.1/orgs/{org_name}/distribution_groups/{distribution_group_name}")]
+        Task<DistributionGroupDetails> GetDistributionGroup(string org_name, string distribution_group_name);
+
+        [Get("/v0.1/orgs/{org_name}/distribution_groups")]
+        Task<List<DistributionGroupDetails>> GetDistributionGroups(string org_name);
+
+        [Get("/v0.1/orgs/{org_name}/azure_subscriptions")]
+        Task<List<AzureSubscription>> GetAzureSubscriptions(string org_name);
+
+        [Get("/v0.1/orgs/{org_name}/apps")]
+        Task<List<App>> GetApps(string org_name);
+
+        [Get("/v0.1/orgs/{org_name}")]
+        Task<Organization> GetOrganization(string org_name);
+
+        [Get("/v0.1/orgs")]
+        Task<List<Organization>> GetOrganizations();
+
+        [Get("/v0.1/invitations/sent")]
+        Task<List<Invitation>> GetInvitations();
+
+        [Get("/v0.1/azure_subscriptions")]
+        Task<List<AzureSubscription>> GetAzureSubscriptions();
     }
 }
