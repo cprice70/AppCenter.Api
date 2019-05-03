@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,8 +25,7 @@ namespace AppCenter.Console
                     .AddJsonFile("appsettings.json", true, true)
                     .Build();
                 Api_Token = config["ApiKey"];
-                Owner = config["Owner"];
-                App = config["App"];
+               
                 Task<string> GetHeaderValue() => Task.FromResult(Api_Token);
                 var handler = new ApiKeyHttpClientHandler(GetHeaderValue);
                 var httpClient = new HttpClient(handler)
@@ -44,24 +44,6 @@ namespace AppCenter.Console
                 var connections = await appCenterApiUser.GetServiceConnections();
                 System.Console.WriteLine($"Number of Connections: {connections.Count}");
 
-                var users = await appCenterApiUser.GetUsers(Owner);
-                System.Console.WriteLine($"Number of Users: {users.Count}");
-
-                var testers = await appCenterApiUser.GetTesters(Owner);
-                System.Console.WriteLine($"Number of Testers: {testers.Count}");
-
-                var releases = await appCenterApiDist.GetAppReleases(Owner, App);
-                System.Console.WriteLine($"Number of Releases: {releases.Count}");
-
-                var recent_releases = await appCenterApiDist.GetAppRecentReleases(Owner, App);
-                System.Console.WriteLine($"Number of Recent Releases: {recent_releases.Count}");
-
-                var subs = await appCenterApiUser.GetAzureSubscriptions();
-                System.Console.WriteLine($"Number of Azure Subscriptions: {subs.Count}");
-
-                var invites = await appCenterApiUser.GetInvitations();
-                System.Console.WriteLine($"Number of Invitations: {invites.Count}");
-
                 var orgs = await appCenterApiUser.GetOrganizations();
                 System.Console.WriteLine($"Number of Organizations: {orgs.Count}");
 
@@ -69,6 +51,40 @@ namespace AppCenter.Console
                 {
                     System.Console.WriteLine($"Organization Name {org.Name}");
                 }
+
+                if (orgs.Any())
+                {
+                    Owner = orgs[0].Name;
+                    var users = await appCenterApiUser.GetUsers(Owner);
+                    System.Console.WriteLine($"Number of Users: {users.Count}");
+
+                    var testers = await appCenterApiUser.GetTesters(Owner);
+                    System.Console.WriteLine($"Number of Testers: {testers.Count}");
+
+                    var apps = await appCenterApiUser.GetApps(Owner);
+
+                    if (apps.Any())
+                    {
+                        App = apps[0].Name;
+                        var releases = await appCenterApiDist.GetAppReleases(Owner, App);
+                        System.Console.WriteLine($"Number of Releases: {releases.Count}");
+
+                        var recent_releases = await appCenterApiDist.GetAppRecentReleases(Owner, App);
+                        System.Console.WriteLine($"Number of Recent Releases: {recent_releases.Count}");
+                    }
+                }
+                var subs = await appCenterApiUser.GetAzureSubscriptions();
+                System.Console.WriteLine($"Number of Azure Subscriptions: {subs.Count}");
+
+                var invites = await appCenterApiUser.GetInvitations();
+                System.Console.WriteLine($"Number of Invitations: {invites.Count}");
+
+                var total_apps = await appCenterApiUser.GetApps();
+                System.Console.WriteLine($"Number of Apps: {total_apps.Count}");
+
+                var tokens = await appCenterApiUser.GetTokens();
+                System.Console.WriteLine($"Number of Tokens: {tokens.Count}");
+
             }
             catch (Exception ex)
             {

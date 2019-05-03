@@ -67,5 +67,14 @@ namespace AppCenter.Api
 
         [Get("/v0.1/azure_subscriptions")]
         Task<List<AzureSubscription>> GetAzureSubscriptions();
+
+        [Get("/v0.1/apps/{owner_name}/{app_name}")]
+        Task<App> GetApp(string owner_name, string app_name);
+
+        [Get("/v0.1/apps")]
+        Task<List<App>> GetApps();
+
+        [Get("/v0.1/api_tokens")]
+        Task<List<Token>> GetTokens();
     }
 }
