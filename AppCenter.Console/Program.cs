@@ -15,7 +15,7 @@ namespace AppCenter.Console
         public static string Owner;
         public static string App;
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             try
             {
